@@ -18,7 +18,11 @@ textarea {
   border: 1px solid black;
 }
 
-.space {
+.active {
+  background-color: #00f;
+}
+
+.Space {
   width: 15em;
 }
 
