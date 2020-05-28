@@ -52,8 +52,11 @@ export default class Keyboard {
       case 'Space':
         this.textArea.value += ' ';
         break;
-        case 'Enter':
-        this.textArea.value += "\n";
+      case 'Alt':
+        this.textArea.value += '';
+        break;
+      case 'Enter':
+        this.textArea.value += '\n';
         break;
       default:
         if (this.upperCase) {
@@ -78,16 +81,15 @@ export default class Keyboard {
           this.upperCase = true;
         } else if (e.key === 'CapsLock') {
           this.upperCase = !this.upperCase;
-        } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt'){
-        }
-         else {
+        } else if (e.key !== 'Control' || e.key !== 'Shift' || e.key !== 'Alt') {
           this.typing(e.key);
         }
       }
     });
     this.parent.addEventListener('keyup', (e) => {
       if (document.querySelector(`[data-selector='key-${String(e.key)}']`)) {
-      document.querySelector(`[data-selector='key-${String(e.key)}']`).classList.remove('active');}
+        document.querySelector(`[data-selector='key-${String(e.key)}']`).classList.remove('active');
+      }
       if (e.key === 'Shift' && this.upperCase === true) {
         this.upperCase = false;
       }
