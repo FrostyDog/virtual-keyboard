@@ -1,10 +1,12 @@
 export default class Keyboard {
-  constructor(parent, keys, textArea) {
-    this.textArea = textArea;
+  constructor(parent, keys) {
+    this.keys = keys;
     this.parent = parent;
-    this.createKeyboard(keys);
+    this.createKeyboard(this.keys);
     this.imitateKeys();
     this.highlightKeys();
+    this.checkFocus();
+    this.upperCase = false;
   }
 
   createKeyboard(keys) {
@@ -40,25 +42,60 @@ export default class Keyboard {
     this.parent.appendChild(this.keyboard);
   }
 
-
   typing(inputText = '') {
+    switch (inputText) {
+      case 'Backspace':
+        this.textArea.value = this.textArea.value.slice(0, -1);
+        break;
+      case 'Tab':
+        this.textArea.value += '\t';
+        break;
+      case 'Space':
+        this.textArea.value += ' ';
+        break;
+      default:
+        if (this.upperCase) {
+          this.textArea.value += inputText.toLocaleUpperCase();
+        } else {
+          this.textArea.value += inputText;
+        }
+    }
+  }
+
+  checkFocus() {
     this.textArea = document.getElementById('textarea');
-    this.textArea.value += inputText;
+    this.textArea.addEventListener('click', () => {});
   }
 
   highlightKeys() {
     this.parent.addEventListener('keydown', (e) => {
-      const focusCheck = document.activeElement === this.textArea;
-      document.querySelector(`[data-selector='key-${String(e.key)}']`).classList.add('active');
-      if (!focusCheck) { this.typing(e.key); }
+      e.preventDefault();
+      if (document.querySelector(`[data-selector='key-${String(e.key)}']`)) {
+        document.querySelector(`[data-selector='key-${String(e.key)}']`).classList.add('active');
+        if (e.key === 'Shift') {
+          this.upperCase = true;
+        } else if (e.key === 'CapsLock') {
+          this.upperCase = !this.upperCase;
+        } else if (e.key === 'Alt' && this.upperCase === true) {
+          this.changeLayout();
+        } else {
+          this.typing(e.key);
+        }
+      }
     });
     this.parent.addEventListener('keyup', (e) => {
-      document.querySelector(`[data-selector='key-${String(e.key)}']`).classList.remove('active');
+      document
+        .querySelector(`[data-selector='key-${String(e.key)}']`)
+        .classList.remove('active');
+      if (e.key === 'Shift' && this.upperCase === true) {
+        this.upperCase = false;
+      }
     });
   }
 
   imitateKeys() {
     this.keyboard.addEventListener('click', (e) => {
+      e.preventDefault();
       e.target.classList.add('scale-up');
       this.typing(e.target.dataset.value);
       setTimeout(() => e.target.classList.remove('scale-up'), 250);
