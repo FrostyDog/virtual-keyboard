@@ -24,7 +24,6 @@ export default class Keyboard {
           secondChar.innerText = `${el[1]}`;
           secondChar.setAttribute('class', 'second-char');
           key.appendChild(secondChar);
-          // key.innerText = el;
           key.setAttribute('class', 'key');
           key.setAttribute('data-selector', `key-${String(el[0])}`);
           key.setAttribute('data-value', `${String(el[0])}`);
@@ -53,6 +52,9 @@ export default class Keyboard {
       case 'Space':
         this.textArea.value += ' ';
         break;
+        case 'Enter':
+        this.textArea.value += "\n";
+        break;
       default:
         if (this.upperCase) {
           this.textArea.value += inputText.toLocaleUpperCase();
@@ -76,17 +78,16 @@ export default class Keyboard {
           this.upperCase = true;
         } else if (e.key === 'CapsLock') {
           this.upperCase = !this.upperCase;
-        } else if (e.key === 'Alt' && this.upperCase === true) {
-          this.changeLayout();
-        } else {
+        } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt'){
+        }
+         else {
           this.typing(e.key);
         }
       }
     });
     this.parent.addEventListener('keyup', (e) => {
-      document
-        .querySelector(`[data-selector='key-${String(e.key)}']`)
-        .classList.remove('active');
+      if (document.querySelector(`[data-selector='key-${String(e.key)}']`)) {
+      document.querySelector(`[data-selector='key-${String(e.key)}']`).classList.remove('active');}
       if (e.key === 'Shift' && this.upperCase === true) {
         this.upperCase = false;
       }
