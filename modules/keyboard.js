@@ -41,6 +41,7 @@ export default class Keyboard {
   }
 
   typing(inputText = '') {
+    this.textArea = document.getElementById("textarea")
     switch (inputText) {
       case 'Backspace':
         this.textArea.value = this.textArea.value.slice(0, -1);
@@ -116,7 +117,7 @@ export default class Keyboard {
           keyValue !== 'Control'
           || keyValue !== 'Shift'
           || keyValue !== 'Alt'
-        ) {
+        ){
           this.typing(keyValue);
         }
         setTimeout(() => e.target.classList.remove('scale-up'), 250);
