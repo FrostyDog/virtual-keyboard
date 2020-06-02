@@ -4,8 +4,7 @@
   "description": "��#\u0000 \u0000v\u0000i\u0000r\u0000t\u0000u\u0000a\u0000l\u0000-\u0000k\u0000e\u0000y\u0000b\u0000o\u0000a\u0000r\u0000d\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint",
-    "lint": "node node_modules/eslint/bin/eslint.js ./modules"
+    "test": "eslint modules"
   },
   "repository": {
     "type": "git",
@@ -23,7 +22,5 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2"
   },
-  "dependencies": {
-    "lint": "^0.7.0"
-  }
+  "dependencies": {}
 }
