@@ -42,6 +42,7 @@ export default class Keyboard {
   }
 
   typing(inputText = '') {
+    console.log(inputText)
     switch (inputText) {
       case 'Backspace':
         this.textArea.value = this.textArea.value.slice(0, -1);
@@ -49,7 +50,7 @@ export default class Keyboard {
       case 'Tab':
         this.textArea.value += '\t';
         break;
-      case 'Space':
+      case ' ':
         this.textArea.value += ' ';
         break;
       case 'Alt':
@@ -60,7 +61,7 @@ export default class Keyboard {
         break;
       default:
         if (this.upperCase) {
-          this.textArea.value += inputText.toLocaleUpperCase();
+          this.textArea.value += inputText.toUpperCase();
         } else {
           this.textArea.value += inputText;
         }
@@ -69,14 +70,17 @@ export default class Keyboard {
 
   checkFocus() {
     this.textArea = document.getElementById('textarea');
-    this.textArea.addEventListener('click', () => {});
+    // this.textArea.addEventListener('keydown', () => {this.textArea.focus()});
   }
 
   highlightKeys() {
     this.parent.addEventListener('keydown', (e) => {
       e.preventDefault();
-      if (document.querySelector(`[data-selector='key-${String(e.key)}']`)) {
-        document.querySelector(`[data-selector='key-${String(e.key)}']`).classList.add('active');
+      console.log(this.upperCase)
+      let keyValue = String(e.key)
+      if(keyValue === " "){keyValue = "Space"}
+      if (document.querySelector(`[data-selector='key-${keyValue}']`)) {
+        document.querySelector(`[data-selector='key-${keyValue}']`).classList.add('active');
         if (e.key === 'Shift') {
           this.upperCase = true;
         } else if (e.key === 'CapsLock') {
@@ -87,8 +91,10 @@ export default class Keyboard {
       }
     });
     this.parent.addEventListener('keyup', (e) => {
-      if (document.querySelector(`[data-selector='key-${String(e.key)}']`)) {
-        document.querySelector(`[data-selector='key-${String(e.key)}']`).classList.remove('active');
+      let keyValue = String(e.key)
+      if(keyValue === " "){keyValue = "Space"}
+      if (document.querySelector(`[data-selector='key-${keyValue}']`)) {
+        document.querySelector(`[data-selector='key-${keyValue}']`).classList.remove('active');
       }
       if (e.key === 'Shift' && this.upperCase === true) {
         this.upperCase = false;

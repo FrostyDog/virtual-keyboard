@@ -6,7 +6,6 @@ export default class Textarea {
   create(parent) {
     this.textarea = document.createElement('textarea');
     this.textarea.setAttribute('id', 'textarea');
-    this.textarea.setAttribute('tabindex', '-1');
     parent.appendChild(this.textarea);
   }
 }
