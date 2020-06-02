@@ -28,11 +28,11 @@ textarea {
 }
 
 .scale-up{
-transform: scale(1.3)
+transform: scale(1.3);
 }
 
 .scale-down{
-  transform: scale(1.3)
+  transform: scale(1.3);
 }
 
 .active {

@@ -5,7 +5,6 @@ export default class Keyboard {
     this.createKeyboard(this.keys);
     this.imitateKeys();
     this.highlightKeys();
-    this.checkFocus();
     this.upperCase = false;
   }
 
@@ -42,7 +41,6 @@ export default class Keyboard {
   }
 
   typing(inputText = '') {
-    console.log(inputText)
     switch (inputText) {
       case 'Backspace':
         this.textArea.value = this.textArea.value.slice(0, -1);
@@ -68,35 +66,34 @@ export default class Keyboard {
     }
   }
 
-  checkFocus() {
-    this.textArea = document.getElementById('textarea');
-    // this.textArea.addEventListener('keydown', () => {this.textArea.focus()});
-  }
-
   highlightKeys() {
     this.parent.addEventListener('keydown', (e) => {
       e.preventDefault();
-      console.log(this.upperCase)
-      let keyValue = String(e.key)
-      if(keyValue === " "){keyValue = "Space"}
+      let keyValue = String(e.key);
+      if (keyValue === ' ') {
+        keyValue = 'Space';
+      }
       if (document.querySelector(`[data-selector='key-${keyValue}']`)) {
         document.querySelector(`[data-selector='key-${keyValue}']`).classList.add('active');
         if (e.key === 'Shift') {
           this.upperCase = true;
         } else if (e.key === 'CapsLock') {
           this.upperCase = !this.upperCase;
-        } else if (e.key !== 'Control' || e.key !== 'Shift' || e.key !== 'Alt') {
+        } else if (
+          e.key !== 'Control'
+          || e.key !== 'Shift'
+          || e.key !== 'Alt'
+        ) {
           this.typing(e.key);
         }
       }
     });
     this.parent.addEventListener('keyup', (e) => {
-      let keyValue = String(e.key)
-      if(keyValue === " "){keyValue = "Space"}
+      const keyValue = String(e.key);
       if (document.querySelector(`[data-selector='key-${keyValue}']`)) {
         document.querySelector(`[data-selector='key-${keyValue}']`).classList.remove('active');
       }
-      if (e.key === 'Shift' && this.upperCase === true) {
+      if (e.key === 'Shift' || this.upperCase === true) {
         this.upperCase = false;
       }
     });
@@ -105,9 +102,25 @@ export default class Keyboard {
   imitateKeys() {
     this.keyboard.addEventListener('click', (e) => {
       e.preventDefault();
-      e.target.classList.add('scale-up');
-      this.typing(e.target.dataset.value);
-      setTimeout(() => e.target.classList.remove('scale-up'), 250);
+      if (e.target !== document.querySelector('.keyboard')) {
+        e.target.classList.add('scale-up');
+
+        const keyValue = String(e.target.dataset.value);
+        if (keyValue === 'Shift') {
+          this.upperCase = true;
+        } else if (keyValue === 'CapsLock') {
+          this.upperCase = !this.upperCase;
+        } else if (keyValue === 'Space' || keyValue === 'SPACE') {
+          this.typing(' ');
+        } else if (
+          keyValue !== 'Control'
+          || keyValue !== 'Shift'
+          || keyValue !== 'Alt'
+        ) {
+          this.typing(keyValue);
+        }
+        setTimeout(() => e.target.classList.remove('scale-up'), 250);
+      }
     });
   }
 }
